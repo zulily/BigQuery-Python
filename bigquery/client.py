@@ -636,6 +636,7 @@ class BigQueryClient(object):
             priority=None,
             create_disposition=None,
             write_disposition=None,
+            destination_table=None
     ):
         """
         Write query result to table. If dataset or table is not provided,
@@ -667,12 +668,15 @@ class BigQueryClient(object):
             "query": query,
         }
 
-        if dataset and table:
+        if dataset and table and destination_table is None:
             configuration['destinationTable'] = {
                 "projectId": self.project_id,
                 "tableId": table,
                 "datasetId": dataset
             }
+
+        if destination_table:
+            configuration['destinationTable'] = destination_table
 
         if allow_large_results is not None:
             configuration['allowLargeResults'] = allow_large_results
